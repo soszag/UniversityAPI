@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace UniversityAPI.Dto
 {
-    public class TeacherDto : PersonDto
+    public class ParentDto : PersonDto
     {
-        public int TeacherId  { get; set; }
-
-
+        public int ParentId { get; set; }
     }
 }

@@ -94,6 +94,8 @@ namespace UniversityAPI
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
+            services.AddScoped<IParentRepository, ParentRepository>();
         }
 
         /// <summary>
@@ -107,7 +109,11 @@ namespace UniversityAPI
                 cfg.CreateMap<Students, StudentDto>();
                 cfg.CreateMap<Classes, ClassDto>();
                 cfg.CreateMap<Classes, ClassSimpleDto>();
-                cfg.CreateMap<Teachers, TeacherDto>();
+                cfg.CreateMap<Parents, ParentDto>();
+                cfg.CreateMap<ParentDto, Parents>();
+                cfg.CreateMap<ParentCreationDto, Parents>();
+                cfg.CreateMap<ParentUpdateDto, Parents>();
+
                 cfg.CreateMap<StudentCreationDto, Students>();
 
                 cfg.CreateMap<ClassCreationDto, Classes>();
@@ -121,6 +127,9 @@ namespace UniversityAPI
 
                 cfg.CreateMap<StudentUpdateDto, Students>();
                 cfg.CreateMap<ClassUpdateDto, Classes>();
+                cfg.CreateMap<TeacherUpdateDto, Teachers>();
+                cfg.CreateMap<Teachers, TeacherCreationDto>();
+                cfg.CreateMap<TeacherCreationDto, Teachers>();
             });
         }
     }

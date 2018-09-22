@@ -17,9 +17,9 @@ namespace UniversityAPI.Services
             this.context = context;
         }
 
-        public void AddParent(Parents teacher)
+        public void AddParent(Parents parent)
         {
-            context.Add(teacher);
+            context.Add(parent);
         }
 
         public PagedList<Parents> GetParent(ParentQueryParameters prParam)
@@ -35,7 +35,7 @@ namespace UniversityAPI.Services
             if (!string.IsNullOrWhiteSpace(prParam.FirstName))
                 collection = collection.Where(pr => pr.FirstName.Contains(prParam.FirstName, StringComparison.OrdinalIgnoreCase));
 
-            if (!string.IsNullOrWhiteSpace(prParam.PhoneNumber))
+            if (!string.IsNullOrWhiteSpace(prParam.PhoneNumber)) 
                 collection = collection.Where(pr => pr.PhoneNumber.Contains(prParam.PhoneNumber, StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrWhiteSpace(prParam.Email))

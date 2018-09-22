@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
+using UniversityAPI.Dto.UpdateDto;
 using UniversityAPI.Models;
 
 namespace UniversityAPI.Services.Interfaces
