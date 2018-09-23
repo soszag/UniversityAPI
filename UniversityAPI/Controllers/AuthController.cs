@@ -16,7 +16,8 @@ using UniversityAPI.Services.Interfaces;
 namespace UniversityAPI.Controllers
 {
     [Route("api/auth"), Authorize]
-    public class AuthController : Controller
+    [ApiController]
+    public class AuthController : ControllerBase
     {
         private IJWTService jwtService;
         private IUserRepository userRepo;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
 using UniversityAPI.Dto.UpdateDto;
@@ -16,7 +17,8 @@ using UniversityAPI.Services.Interfaces;
 namespace UniversityAPI.Controllers
 {
     [Route("api/parents"), Authorize]
-    public class ParentController : Controller
+    [ApiController]
+    public class ParentController : ControllerBase
     {
         private IParentRepository parentRepo;
         private ITypeCheckerHelper typeCheckerHelper;

@@ -14,7 +14,8 @@ using UniversityAPI.Services.Interfaces;
 namespace UniversityAPI.Controllers
 {
     [Route("api/students"), Authorize]
-    public class StudentController : Controller
+    [ApiController]
+    public class StudentController : ControllerBase
     {
         private IStudentRepository studentsRepo;
         private ITypeCheckerHelper typeChecker;

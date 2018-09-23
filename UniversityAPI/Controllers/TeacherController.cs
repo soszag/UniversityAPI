@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
@@ -14,8 +15,9 @@ using UniversityAPI.Services.Interfaces;
 
 namespace UniversityAPI.Controllers
 {
-    [Route("api/teachers")]
-    public class TeacherController : Controller
+    [Route("api/teachers"), Authorize]
+    [ApiController]
+    public class TeacherController : ControllerBase
     {
         private ITeacherRepository teacherRepo;
         private ITypeCheckerHelper typeCheckerHelper;
