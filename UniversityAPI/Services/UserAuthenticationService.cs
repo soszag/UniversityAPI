@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,6 +16,8 @@ namespace UniversityAPI.Services
 {
     public class UserAuthenticationService : IUserAuthenticationService
     {
+        public const string CLAIM_USER_ID = "UserId";
+
         IUserRepository userRepo;
         IClaimRepository claimRepo;
 
@@ -45,15 +48,24 @@ namespace UniversityAPI.Services
 
         public LogInResult PerformLogInAction(LoginDto login)
         {
-            LogInResult result = new LogInResult();
+            LogInResult result = new LogInResult()
+            {
+                IsValidUser = false
+            };
+
             Users user = userRepo.GetUserByLoginInformation(login);
             
             if (user != null)
             {
                 // Retrieve claims of current user
-                result.ClaimsCollection = claimRepo.GetListOfClaimsForUser(user.UserId.ToString());
+                result.ClaimsCollection = Mapper.Map<ICollection<Claim>>(claimRepo.GetListOfClaimsForUser(user.UserId.ToString()));
+
+                // Additionaly add userId as a claim
+                result.ClaimsCollection.Add(new Claim(CLAIM_USER_ID, user.UserId.ToString(), ""));
+
                 result.UserId = user.UserId.ToString();
                 result.User = user;
+                result.IsValidUser = true;
             }
 
             return result;

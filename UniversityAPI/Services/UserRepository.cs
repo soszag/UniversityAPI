@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
 using UniversityAPI.Dto.UpdateDto;
+using UniversityAPI.Helpers;
 using UniversityAPI.Models;
 using UniversityAPI.Services.Exceptions;
 using UniversityAPI.Services.Interfaces;
@@ -33,33 +34,11 @@ namespace UniversityAPI.Services
 
         public void CreateUser(Users newUser)
         {
-            newUser.Password = ComputeSha256Hash(newUser.Password);
+            newUser.Password = Utilities.ComputeSha256Hash(newUser.Password);
             context.Add(newUser);            
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rawData"></param>
-        /// <returns></returns>
-        public string ComputeSha256Hash(string rawData)
-        {
-            // Create a SHA256   
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // ComputeHash - returns byte array  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string   
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
-
+       
         public override bool Save()
         {
             try
@@ -72,9 +51,19 @@ namespace UniversityAPI.Services
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loginInfo"></param>
+        /// <returns></returns>
         public Users GetUserByLoginInformation(LoginDto loginInfo)
         {
-            throw new NotImplementedException();
+            string encodedPassword = Utilities.ComputeSha256Hash(loginInfo.Password);
+
+            var user = context.Users.Where(us => us.Password == encodedPassword && us.UserName == loginInfo.UserName)
+                              .FirstOrDefault();
+
+            return user ?? null;            
         }
     }
 }

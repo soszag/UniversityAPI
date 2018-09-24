@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UniversityAPI.Services.Exceptions;
 using UniversityAPI.Dto.UpdateDto;
+using System.Security.Claims;
 
 namespace UniversityAPI
 {
@@ -92,7 +93,6 @@ namespace UniversityAPI
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddTransient<ITypeCheckerHelper, TypeCheckerHelper>();
             services.AddScoped<IClassRepository, ClassRepository>();
-            services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITeacherRepository, TeacherRepository>();
             services.AddScoped<IParentRepository, ParentRepository>();
@@ -133,6 +133,10 @@ namespace UniversityAPI
                 cfg.CreateMap<TeacherUpdateDto, Teachers>();
                 cfg.CreateMap<Teachers, TeacherCreationDto>();
                 cfg.CreateMap<TeacherCreationDto, Teachers>();
+
+                cfg.CreateMap<Claims, Claim>().
+                        ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.ClaimName)).
+                        ForMember(dest => dest.Value, opts => opts.MapFrom(src => src.ClaimParameters));
             });
         }
     }

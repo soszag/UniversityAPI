@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using UniversityAPI.Models;
 using UniversityAPI.Services.Interfaces;
 
 namespace UniversityAPI.Services
 {
     public class ClaimRepository : BaseRepository, IClaimRepository
     {
-        public ICollection<Claim> GetListOfClaimsForUser(string userId)
+        public ICollection<Claims> GetListOfClaimsForUser(string userId)
         {
-            throw new NotImplementedException();
+            return new List<Claims>() { };
         }
     }
 }

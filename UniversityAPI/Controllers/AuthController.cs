@@ -19,27 +19,32 @@ namespace UniversityAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IJWTService jwtService;
         private IUserRepository userRepo;
         private IStudentRepository studentRepo;
+        private IUserAuthenticationService authService;
 
-        public AuthController(IJWTService jwtService, IUserRepository userRepo, IStudentRepository studentRepo)
+        public AuthController(IUserRepository userRepo, IStudentRepository studentRepo, IUserAuthenticationService authService)
         {
-            this.jwtService = jwtService;
-            this.userRepo = userRepo;
+              this.userRepo = userRepo;
             this.studentRepo = studentRepo;
+            this.authService = authService;
         }
 
         [HttpPost("Login", Name = "Login"), AllowAnonymous]
         public IActionResult Login([FromBody] LoginDto user)
-        {            
-            var token = jwtService.GenerateToken(user);
-            
-            if (token != null)
-                return Ok(new { Token = token });
-            else
-                return BadRequest();
+        {
+            var loginResult = authService.PerformLogInAction(user);
 
+            if(loginResult.IsValidUser)
+            {
+                string token = authService.GenerateToken(user, loginResult.ClaimsCollection);
+                return Ok(new { Token = token });
+            }
+            else
+            {
+                return BadRequest("Validation failure. Unrecognized user.");
+            }
+            
         }
 
         [HttpGet("{id}", Name = "GetUser")]

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace UniversityAPI.Helpers
 {
@@ -24,5 +26,7 @@ namespace UniversityAPI.Helpers
 
             return inputCollection;
         }
+
+        
     }
 }
