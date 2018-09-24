@@ -64,9 +64,17 @@ namespace UniversityAPI.Services
             }
         }
 
-        public EnumUpdateResult UpdateParent(Parents teacher)
+        public EnumUpdateResult UpdateParent(Parents parent)
         {
-            throw new NotImplementedException();
+            if (!context.Parents.Contains(parent))
+            {
+                return EnumUpdateResult.EntryNotFound;
+            }
+            else
+            {
+                context.Parents.Update(parent);
+                return EnumUpdateResult.Succesfull;
+            }
         }
     }
 }

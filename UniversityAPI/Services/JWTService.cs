@@ -10,6 +10,7 @@ using UniversityAPI.Dto;
 
 namespace UniversityAPI.Services.Interfaces
 {
+    [Obsolete("WARNING !! Remove this when new service is done.")]
     public class JWTService : IJWTService
     {
         public string GenerateToken(LoginDto user)
@@ -26,7 +27,7 @@ namespace UniversityAPI.Services.Interfaces
                     var tokeOptions = new JwtSecurityToken(
                         issuer: "http://localhost:57324/",
                         audience: "http://localhost:57324/",
-                        claims: new List<Claim>(),
+                        claims: new List<Claim>() { new Claim("UserId", "150", "ValueType") },
                         expires: DateTime.Now.AddMinutes(60),
                         signingCredentials: signinCredentials
                     );

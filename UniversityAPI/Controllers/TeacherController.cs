@@ -35,7 +35,7 @@ namespace UniversityAPI.Controllers
             {
                 Id = id.ToString()
             });
-
+            
             if (t.Count == 0)
             {
                 return NotFound("No results found");
@@ -54,6 +54,7 @@ namespace UniversityAPI.Controllers
             {
                 return BadRequest();
             }
+            var userId = User.Claims.Where(c => c.Type == "UserId").FirstOrDefault()?.Value;
 
             var teachersFromRepo = teacherRepo.GetTeachers(teacherQuery);
 
@@ -85,6 +86,8 @@ namespace UniversityAPI.Controllers
             {
                 return NotFound("Entry to update not found");
             }
+
+            teacherRepo.Save();
 
             return Ok();
         }

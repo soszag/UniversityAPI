@@ -34,7 +34,7 @@ namespace UniversityAPI.Controllers
         public IActionResult Login([FromBody] LoginDto user)
         {            
             var token = jwtService.GenerateToken(user);
-
+            
             if (token != null)
                 return Ok(new { Token = token });
             else

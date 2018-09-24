@@ -22,6 +22,8 @@ namespace UniversityAPI.Services.Interfaces
 
         LoggingUserStatus CheckIfUserExists(LoginDto loginInfo);
 
+        Users GetUserByLoginInformation(LoginDto loginInfo);
+
         int ChangeUserPassword(UserChangePassword passwordChange);
     }
 }

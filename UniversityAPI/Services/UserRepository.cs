@@ -42,7 +42,7 @@ namespace UniversityAPI.Services
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        private static string ComputeSha256Hash(string rawData)
+        public string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
             using (SHA256 sha256Hash = SHA256.Create())
@@ -72,5 +72,9 @@ namespace UniversityAPI.Services
             }
         }
 
+        public Users GetUserByLoginInformation(LoginDto loginInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

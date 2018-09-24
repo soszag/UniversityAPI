@@ -65,7 +65,15 @@ namespace UniversityAPI.Services
 
         public EnumUpdateResult UpdateTeacher(Teachers teacher)
         {
-            throw new NotImplementedException();
+            if (!context.Teachers.Contains(teacher))
+            {
+                return EnumUpdateResult.EntryNotFound;
+            }
+            else
+            {
+                context.Teachers.Update(teacher);
+                return EnumUpdateResult.Succesfull;
+            }
         }
     }
 }
