@@ -48,8 +48,9 @@ namespace UniversityAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
-        public IActionResult GetUser ([FromQuery] int id)
+        public IActionResult GetUser ([FromRoute] int id)
         {
+
             throw new NotImplementedException();
         }
 
@@ -61,36 +62,24 @@ namespace UniversityAPI.Controllers
         [HttpPost("CreateUser", Name = "CreateUser")]
         public IActionResult CreateUser([FromBody] UserCreationDto newUser)
         {
-            Users user = Mapper.Map<Users>(newUser);
+            var user = authService.CreateNewUser(newUser);
 
-            // Create appropriate user data according to flags
-            if (newUser.IsTeacher)
+            if (!user.IsCreatedSuccesfully)
             {
-                Teachers teacher = Mapper.Map<Teachers>(newUser);
-                // ...
+                if(user.CreationError == Services.HelperObjects.UserCreationError.LoginAlreadyExists)
+                {
+                    return BadRequest("Cannot create user. User with given user name already exists");
+                }
+                else
+                {
+                    return BadRequest("Cannot create user. Unknown error");
+                }
+            }
+            else
+            {
+                return CreatedAtRoute("GetUser", new { id = user.CreatedUser.UserId }, user.CreatedUser);
             }
             
-            if (newUser.IsStudent)
-            {
-                Students student = Mapper.Map<Students>(newUser);
-                studentRepo.AddStudent(student);
-                studentRepo.Save();
-                user.StudentId = student.StudentId;
-            }
-
-            if (newUser.IsParent)
-            {
-                Parents parent = Mapper.Map<Parents>(newUser);
-                //...
-            }
-
-            userRepo.CreateUser(user);
-            userRepo.Save();
-
-            UserCreationDto withoutPassword = newUser;
-            withoutPassword.Password = "";
-
-            return CreatedAtRoute("GetUser", new { id = user.UserId }, withoutPassword);
 
         }
 

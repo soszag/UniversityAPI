@@ -73,7 +73,7 @@ namespace UniversityAPI
                 app.UseExceptionHandler();
             }
 
-            AutoMapperConfiguration();
+            AutoMapperMappings.AutoMapperConfiguration();
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
@@ -101,43 +101,5 @@ namespace UniversityAPI
             services.AddScoped<IClaimRepository, ClaimRepository>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void AutoMapperConfiguration()
-        {
-            AutoMapper.Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<Teachers, TeacherDto>();
-                cfg.CreateMap<Students, StudentDto>();
-                cfg.CreateMap<Classes, ClassDto>();
-                cfg.CreateMap<Classes, ClassSimpleDto>();
-                cfg.CreateMap<Parents, ParentDto>();
-                cfg.CreateMap<ParentDto, Parents>();
-                cfg.CreateMap<ParentCreationDto, Parents>();
-                cfg.CreateMap<ParentUpdateDto, Parents>();
-
-                cfg.CreateMap<StudentCreationDto, Students>();
-
-                cfg.CreateMap<ClassCreationDto, Classes>();
-                cfg.CreateMap<Classes, ClassCreationDto>();
-
-                cfg.CreateMap<UserCreationDto, Users>();
-                cfg.CreateMap<UserCreationDto, Students>();
-                cfg.CreateMap<UserCreationDto, Teachers>();
-                cfg.CreateMap<UserCreationDto, Parents>();
-                cfg.CreateMap<Users, UserCreationDto>();
-
-                cfg.CreateMap<StudentUpdateDto, Students>();
-                cfg.CreateMap<ClassUpdateDto, Classes>();
-                cfg.CreateMap<TeacherUpdateDto, Teachers>();
-                cfg.CreateMap<Teachers, TeacherCreationDto>();
-                cfg.CreateMap<TeacherCreationDto, Teachers>();
-
-                cfg.CreateMap<Claims, Claim>().
-                        ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.ClaimName)).
-                        ForMember(dest => dest.Value, opts => opts.MapFrom(src => src.ClaimParameters));
-            });
-        }
     }
 }

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
 using UniversityAPI.Dto.UpdateDto;
+using UniversityAPI.Helpers;
+using UniversityAPI.Helpers.QueryParameters;
 using UniversityAPI.Models;
 
 namespace UniversityAPI.Services.Interfaces
@@ -25,5 +27,8 @@ namespace UniversityAPI.Services.Interfaces
         Users GetUserByLoginInformation(LoginDto loginInfo);
 
         int ChangeUserPassword(UserChangePassword passwordChange);
+
+        PagedList<Users> GetUsers(UserQueryParameters userQuery);
+
     }
 }

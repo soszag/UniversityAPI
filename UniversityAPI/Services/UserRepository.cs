@@ -8,6 +8,7 @@ using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
 using UniversityAPI.Dto.UpdateDto;
 using UniversityAPI.Helpers;
+using UniversityAPI.Helpers.QueryParameters;
 using UniversityAPI.Models;
 using UniversityAPI.Services.Exceptions;
 using UniversityAPI.Services.Interfaces;
@@ -38,6 +39,28 @@ namespace UniversityAPI.Services
             context.Add(newUser);            
         }
 
+        public PagedList<Users> GetUsers(UserQueryParameters userQuery)
+        {
+            var collection = context.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(userQuery.UserId) && int.TryParse(userQuery.UserId, out var intId))
+                collection = collection.Where(u => u.UserId == intId);
+            if (!string.IsNullOrWhiteSpace(userQuery.UserName))
+                collection = collection.Where(u => u.UserName.Contains(userQuery.UserName));
+            if (userQuery.IsLogged != null)
+                collection = collection.Where(u => u.IsLogged == true);
+
+            if (userQuery.TeacherId != null)
+                collection = collection.Where(u => u.TeacherId == userQuery.TeacherId);
+            if (userQuery.StudentId != null)
+                collection = collection.Where(u => u.StudentId == userQuery.StudentId);
+            if (userQuery.ParentId != null)
+                collection = collection.Where(u => u.ParentId == userQuery.ParentId);
+
+            collection = ReflectionHelper.PerformSorting<Users>(userQuery.OrderBy, collection);
+
+            return PagedList<Users>.Create(collection, userQuery.PageNumber, userQuery.PageSize);
+        }
        
         public override bool Save()
         {
