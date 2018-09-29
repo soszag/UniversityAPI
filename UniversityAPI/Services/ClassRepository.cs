@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UniversityAPI.Helpers;
 using UniversityAPI.Helpers.QueryParameters;
@@ -15,14 +16,14 @@ namespace UniversityAPI.Services
     /// </summary>
     public class ClassRepository : BaseRepository, IClassRepository
     {
-
         public ClassRepository(EduDataContext context)
         {
             this.context = context;
         }
 
-        public void AddClass(Classes st)
+        public void AddClass(Classes st, ClaimsPrincipal claims)
         {
+            context.CreateModificationInformation(st, claims);
             context.Classes.Add(st);
         }
 
@@ -53,9 +54,19 @@ namespace UniversityAPI.Services
             }
         }
 
-        public EnumUpdateResult UpdateClass(Classes cl)
+        public EnumUpdateResult UpdateClass(Classes cl, ClaimsPrincipal claims)
         {
-            throw new NotImplementedException();
+            if (!context.Classes.Contains(cl))
+            {
+                return EnumUpdateResult.EntryNotFound;
+            }
+            else
+            {
+                context.UpdateModificationInformation(cl, claims);
+                context.Classes.Update(cl);
+                context.Entry(cl).Property(p => p.CreationDate).IsModified = false;
+                return EnumUpdateResult.Succesfull;
+            }
         }
     }
 }

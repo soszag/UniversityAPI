@@ -16,7 +16,7 @@ namespace UniversityAPI.Services.Interfaces
 
         string GenerateToken(LoginDto user, IEnumerable<Claim> claims);
 
-        CreateUserResult CreateNewUser(UserCreationDto createUser);
+        CreateUserResult CreateNewUser(UserCreationDto createUser, ClaimsPrincipal claims);
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UniversityAPI.Helpers;
 using UniversityAPI.Helpers.QueryParameters;
@@ -17,8 +18,9 @@ namespace UniversityAPI.Services
             this.context = context;
         }
 
-        public void AddTeacher(Teachers teacher)
+        public void AddTeacher(Teachers teacher, ClaimsPrincipal claims)
         {
+            context.CreateModificationInformation(teacher, claims);
             context.Add(teacher);
         }
 
@@ -63,7 +65,7 @@ namespace UniversityAPI.Services
             }
         }
 
-        public EnumUpdateResult UpdateTeacher(Teachers teacher)
+        public EnumUpdateResult UpdateTeacher(Teachers teacher, ClaimsPrincipal claims)
         {
             if (!context.Teachers.Contains(teacher))
             {
@@ -71,7 +73,9 @@ namespace UniversityAPI.Services
             }
             else
             {
+                context.UpdateModificationInformation(teacher, claims);
                 context.Teachers.Update(teacher);
+                context.Entry(teacher).Property(p => p.CreationDate).IsModified = false;
                 return EnumUpdateResult.Succesfull;
             }
         }

@@ -62,7 +62,7 @@ namespace UniversityAPI.Controllers
         [HttpPost("CreateUser", Name = "CreateUser")]
         public IActionResult CreateUser([FromBody] UserCreationDto newUser)
         {
-            var user = authService.CreateNewUser(newUser);
+            var user = authService.CreateNewUser(newUser, User);
 
             if (!user.IsCreatedSuccesfully)
             {

@@ -54,7 +54,6 @@ namespace UniversityAPI.Controllers
             {
                 return BadRequest();
             }
-            var userId = User.Claims.Where(c => c.Type == "UserId").FirstOrDefault()?.Value;
 
             var teachersFromRepo = teacherRepo.GetTeachers(teacherQuery);
 
@@ -68,7 +67,7 @@ namespace UniversityAPI.Controllers
         {
             Teachers t = Mapper.Map<Teachers>(teacher);
 
-            teacherRepo.AddTeacher(t);
+            teacherRepo.AddTeacher(t,User);
 
             teacherRepo.Save();
 
@@ -80,7 +79,7 @@ namespace UniversityAPI.Controllers
         {
             var t = Mapper.Map<Teachers>(updateTeacher);
 
-            var updateState = teacherRepo.UpdateTeacher(t);
+            var updateState = teacherRepo.UpdateTeacher(t, User);
 
             if (updateState == EnumUpdateResult.EntryNotFound)
             {

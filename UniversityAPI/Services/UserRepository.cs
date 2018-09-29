@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,8 +34,9 @@ namespace UniversityAPI.Services
             throw new NotImplementedException();
         }
 
-        public void CreateUser(Users newUser)
+        public void CreateUser(Users newUser, ClaimsPrincipal claims)
         {
+            context.CreateModificationInformation(newUser, claims);
             newUser.Password = Utilities.ComputeSha256Hash(newUser.Password);
             context.Add(newUser);            
         }

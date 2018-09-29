@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UniversityAPI.Helpers;
 using UniversityAPI.Helpers.QueryParameters;
@@ -12,8 +13,8 @@ namespace UniversityAPI.Services.Interfaces
     {
         PagedList<Teachers> GetTeachers(TeacherQueryParameters teacherResourceParameters);
 
-        void AddTeacher(Teachers techer);
+        void AddTeacher(Teachers techer, ClaimsPrincipal claims);
 
-        EnumUpdateResult UpdateTeacher(Teachers teacher);
+        EnumUpdateResult UpdateTeacher(Teachers teacher, ClaimsPrincipal claims);
     }
 }

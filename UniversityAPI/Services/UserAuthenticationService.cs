@@ -18,7 +18,7 @@ namespace UniversityAPI.Services
 {
     public class UserAuthenticationService : IUserAuthenticationService
     {
-        public const string CLAIM_USER_ID = "UserId";
+        public static string CLAIM_USER_ID = "UserId";
 
         private IUserRepository userRepo;
         private IClaimRepository claimRepo;
@@ -36,6 +36,12 @@ namespace UniversityAPI.Services
             this.parentRepo = prRepo;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="claims"></param>
+        /// <returns></returns>
         public string GenerateToken(LoginDto user, IEnumerable<Claim> claims)
         {
             string tokenToReturn = null;
@@ -55,6 +61,11 @@ namespace UniversityAPI.Services
             return tokenToReturn;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         public LogInResult PerformLogInAction(LoginDto login)
         {
             LogInResult result = new LogInResult()
@@ -80,7 +91,12 @@ namespace UniversityAPI.Services
             return result;
         }
 
-        public CreateUserResult CreateNewUser(UserCreationDto createUser)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="createUser"></param>
+        /// <returns></returns>
+        public CreateUserResult CreateNewUser(UserCreationDto createUser, ClaimsPrincipal claims)
         {
             CreateUserResult result = new CreateUserResult()
             {
@@ -107,7 +123,7 @@ namespace UniversityAPI.Services
             if (createUser.IsTeacher)
             {
                 Teachers teacher = Mapper.Map<Teachers>(createUser);
-                teacherRepo.AddTeacher(teacher);
+                teacherRepo.AddTeacher(teacher, claims);
                 teacherRepo.Save();
                 user.TeacherId = teacher.TeacherId;
                 result.CreatedUser = Mapper.Map<UserDto>(teacher);
@@ -116,7 +132,7 @@ namespace UniversityAPI.Services
             if (createUser.IsStudent)
             {
                 Students student = Mapper.Map<Students>(createUser);
-                studentRepo.AddStudent(student);
+                studentRepo.AddStudent(student, claims);
                 studentRepo.Save();
                 user.StudentId = student.StudentId;
                 result.CreatedUser = Mapper.Map<UserDto>(student);
@@ -125,13 +141,13 @@ namespace UniversityAPI.Services
             if (createUser.IsParent)
             {
                 Parents parent = Mapper.Map<Parents>(createUser);
-                parentRepo.AddParent(parent);
+                parentRepo.AddParent(parent, claims);
                 parentRepo.Save();
                 user.ParentId = parent.ParentId;
                 result.CreatedUser = Mapper.Map<UserDto>(parent);
             }
 
-            userRepo.CreateUser(user);
+            userRepo.CreateUser(user, claims);
             userRepo.Save();
             result.CreatedUser.UserId = user.UserId.ToString();
 

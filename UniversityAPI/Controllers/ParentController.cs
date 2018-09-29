@@ -68,7 +68,7 @@ namespace UniversityAPI.Controllers
         {
             Parents pr = Mapper.Map<Parents>(parent);
 
-            parentRepo.AddParent(pr);
+            parentRepo.AddParent(pr, User);
 
             parentRepo.Save();
             return CreatedAtRoute("GetParent", new { id = pr.ParentId }, pr);
@@ -79,7 +79,7 @@ namespace UniversityAPI.Controllers
         {
             var pr = Mapper.Map<Parents>(updateParent);
 
-            var updateState = parentRepo.UpdateParent(pr);
+            var updateState = parentRepo.UpdateParent(pr, User);
 
             if (updateState == EnumUpdateResult.EntryNotFound)
             {

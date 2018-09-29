@@ -67,7 +67,7 @@ namespace UniversityAPI.Controllers
         {
             Classes cl = Mapper.Map<Classes>(classes);
 
-            classRepository.AddClass(cl);
+            classRepository.AddClass(cl, User);
 
             classRepository.Save();
             return CreatedAtRoute("GetClass", new { id = cl.ClassId }, cl);
@@ -78,7 +78,7 @@ namespace UniversityAPI.Controllers
         {
             var cl = Mapper.Map<Classes>(updateClass);
 
-            var updateState = classRepository.UpdateClass(cl);
+            var updateState = classRepository.UpdateClass(cl, User);
 
             if (updateState == EnumUpdateResult.EntryNotFound)
             {

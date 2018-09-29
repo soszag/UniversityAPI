@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
@@ -20,7 +21,7 @@ namespace UniversityAPI.Services.Interfaces
 
     public interface IUserRepository : IBaseRepository
     {
-        void CreateUser(Users newUser);
+        void CreateUser(Users newUser, ClaimsPrincipal claims);
 
         LoggingUserStatus CheckIfUserExists(LoginDto loginInfo);
 

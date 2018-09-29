@@ -84,7 +84,7 @@ namespace UniversityAPI.Controllers
         {
             Students st = Mapper.Map<Students>(student);
 
-            studentsRepo.AddStudent(st);
+            studentsRepo.AddStudent(st, User);
 
             studentsRepo.Save();
 
@@ -96,7 +96,7 @@ namespace UniversityAPI.Controllers
         {
             var student = Mapper.Map<Students>(st);
 
-            var updateState = studentsRepo.UpdateStudent(student);
+            var updateState = studentsRepo.UpdateStudent(student, User);
 
             if (updateState == EnumUpdateResult.EntryNotFound)
             {

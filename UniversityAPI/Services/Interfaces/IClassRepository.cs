@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UniversityAPI.Helpers;
 using UniversityAPI.Helpers.QueryParameters;
@@ -12,8 +13,8 @@ namespace UniversityAPI.Services.Interfaces
     {
         PagedList<Classes> GetClasses(ClassQueryParameters classResourceParameters);
 
-        void AddClass(Classes st);
+        void AddClass(Classes st, ClaimsPrincipal claims);
 
-        EnumUpdateResult UpdateClass(Classes cl);
+        EnumUpdateResult UpdateClass(Classes cl, ClaimsPrincipal claims);
     }
 }
