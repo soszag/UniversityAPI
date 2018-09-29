@@ -48,7 +48,7 @@ namespace UniversityAPI.Controllers
         }
 
         [HttpGet("GetTeachers", Name = "GetTeachers")]
-        public IActionResult GetParent([FromQuery] TeacherQueryParameters teacherQuery)
+        public IActionResult GetTeachers([FromQuery] TeacherQueryParameters teacherQuery)
         {
             if (!typeCheckerHelper.CheckIfTypeHasPoperties(teacherQuery.Fields, typeof(TeacherDto)))
             {

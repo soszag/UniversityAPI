@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityAPI.Dto;
 using UniversityAPI.Dto.CreationDto;
+using UniversityAPI.Helpers.QueryParameters;
 using UniversityAPI.Models;
 using UniversityAPI.Services.Exceptions;
+using UniversityAPI.Services.HelperObjects;
 using UniversityAPI.Services.Interfaces;
 
 namespace UniversityAPI.Controllers
@@ -20,13 +22,11 @@ namespace UniversityAPI.Controllers
     public class AuthController : ControllerBase
     {
         private IUserRepository userRepo;
-        private IStudentRepository studentRepo;
         private IUserAuthenticationService authService;
 
-        public AuthController(IUserRepository userRepo, IStudentRepository studentRepo, IUserAuthenticationService authService)
+        public AuthController(IUserRepository userRepo, IUserAuthenticationService authService)
         {
-              this.userRepo = userRepo;
-            this.studentRepo = studentRepo;
+            this.userRepo = userRepo;
             this.authService = authService;
         }
 
@@ -50,8 +50,17 @@ namespace UniversityAPI.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public IActionResult GetUser ([FromRoute] int id)
         {
+            var user = userRepo.GetUsers(new UserQueryParameters { UserId = id.ToString() }).FirstOrDefault();
 
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            else
+            {
+                UserDto u = Mapper.Map<UserDto>(user);
+                return Ok(u);
+            }
         }
 
         /// <summary>
@@ -66,7 +75,7 @@ namespace UniversityAPI.Controllers
 
             if (!user.IsCreatedSuccesfully)
             {
-                if(user.CreationError == Services.HelperObjects.UserCreationError.LoginAlreadyExists)
+                if(user.CreationError == UserCreationError.LoginAlreadyExists)
                 {
                     return BadRequest("Cannot create user. User with given user name already exists");
                 }
