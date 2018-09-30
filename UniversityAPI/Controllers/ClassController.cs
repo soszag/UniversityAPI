@@ -16,6 +16,7 @@ using UniversityAPI.Dto.UpdateDto;
 namespace UniversityAPI.Controllers
 {
     [Route("api/classes"), Authorize]
+    [ApiController]
     public class ClassController : ControllerBase
     {
         private IClassRepository classRepository;

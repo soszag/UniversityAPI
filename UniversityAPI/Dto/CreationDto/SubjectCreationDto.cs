@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UniversityAPI.Dto
+namespace UniversityAPI.Dto.CreationDto
 {
-    public class SubjectDto : BaseTypeDto
+    public class SubjectCreationDto
     {
-        public int SubjectId { get; set; }
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string ShortName { get; set; }
+
         public string Description { get; set; }
     }
 }

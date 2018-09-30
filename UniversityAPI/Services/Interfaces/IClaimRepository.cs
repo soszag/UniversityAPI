@@ -6,5 +6,10 @@ namespace UniversityAPI.Services.Interfaces
     public interface IClaimRepository
     {
         ICollection<Claims> GetListOfClaimsForUser(string userId);
+
+        void AddClaims(IEnumerable<Claims> claims);
+
+        
+
     }
 }

@@ -99,6 +99,7 @@ namespace UniversityAPI
             
             services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
             services.AddScoped<IClaimRepository, ClaimRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
         }
 
     }

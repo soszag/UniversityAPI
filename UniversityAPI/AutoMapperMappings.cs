@@ -49,6 +49,10 @@ namespace UniversityAPI
                 cfg.CreateMap<Teachers, UserDto>();
                 cfg.CreateMap<Parents, UserDto>();
 
+                cfg.CreateMap<SubjectCreationDto, Subjects>();
+                cfg.CreateMap<SubjectUpdateDto, Subjects>();
+                cfg.CreateMap<SubjectDto, Subjects>();
+
                 cfg.CreateMap<Claims, Claim>().
                         ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.ClaimName)).
                         ForMember(dest => dest.Value, opts => opts.MapFrom(src => src.ClaimParameters));
