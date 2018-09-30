@@ -71,7 +71,7 @@ namespace UniversityAPI.Controllers
             subjectRepository.AddSubject(sb, User);
 
             subjectRepository.Save();
-            return CreatedAtRoute("GetClass", new { id = sb.SubjectId }, sb);
+            return CreatedAtRoute("GetSubject", new { id = sb.SubjectId }, sb);
         }
 
         [HttpPut("UpdateSubject", Name = "UpdateSubject")]
