@@ -1,8 +1,5 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UniversityAPI.Dto;
 using UniversityAPI.Helpers;
@@ -12,6 +9,11 @@ using UniversityAPI.Helpers.QueryParameters;
 using UniversityAPI.Dto.CreationDto;
 using Microsoft.AspNetCore.Authorization;
 using UniversityAPI.Dto.UpdateDto;
+using GenericCrudType = UniversityAPI.Services.Interfaces.ICrudGenericService<UniversityAPI.Models.Classes,
+                                                                              UniversityAPI.Helpers.QueryParameters.ClassQueryParameters,
+                                                                              UniversityAPI.Dto.ClassDto,
+                                                                              UniversityAPI.Dto.CreationDto.ClassCreationDto,
+                                                                              UniversityAPI.Dto.UpdateDto.ClassUpdateDto>;
 
 namespace UniversityAPI.Controllers
 {
@@ -21,72 +23,38 @@ namespace UniversityAPI.Controllers
     {
         private IClassRepository classRepository;
         private ITypeCheckerHelper typeCheckerHelper;
+        private GenericCrudType crudService;
 
-        public ClassController(IClassRepository classRepository, ITypeCheckerHelper typeChecker)
+        public ClassController(IClassRepository classRepository, ITypeCheckerHelper typeChecker, GenericCrudType crudService)
         {
             this.classRepository = classRepository;
             this.typeCheckerHelper = typeChecker;
+            this.crudService = crudService;
         }
 
         [HttpGet("{id}", Name = "GetClass")]
         public IActionResult GetClass([FromRoute] int id)
         {
-            var cl = classRepository.GetClasses( new ClassQueryParameters 
-            {
-                ClassID = id.ToString()
-            });
-
-            if (cl.Count == 0)
-            {
-                return NotFound("No results found");
-            }
-            else
-            {
-                var stDto = Mapper.Map<ClassDto>(cl[0]);
-                return Ok(stDto);
-            }
+            return crudService.Get(id);
         }
 
         [HttpGet("GetClasses", Name = "GetClasses")]
         public IActionResult GetClasses([FromQuery] ClassQueryParameters classes)
         {
-            if(!typeCheckerHelper.CheckIfTypeHasPoperties(classes.Fields, typeof(ClassDto)))
-            {
-                return BadRequest();
-            }
-
-            var classesFromRepo = classRepository.GetClasses(classes);
-
-            IEnumerable<ClassDto> cl = Mapper.Map<IEnumerable<ClassDto>>(classesFromRepo);
-
-            return Ok(cl.ShapeData(classes.Fields));
-
+            return crudService.Get(classes.Fields, classes);
         }
 
         [HttpPost("CreateClass", Name = "CreateClass")]
         public IActionResult CreateClass([FromBody] ClassCreationDto classes)
         {
-            Classes cl = Mapper.Map<Classes>(classes);
-
-            classRepository.AddClass(cl, User);
-
-            classRepository.Save();
-            return CreatedAtRoute("GetClass", new { id = cl.ClassId }, cl);
+            ClassDto cl = crudService.Create(classes, User);
+            return CreatedAtRoute("GetClass", new { id = cl.ID }, cl);
         }
 
         [HttpPut("UpdateClass", Name ="UpdateClass")]
         public IActionResult UpdateClass([FromBody] ClassUpdateDto updateClass)
         {
-            var cl = Mapper.Map<Classes>(updateClass);
-
-            var updateState = classRepository.UpdateClass(cl, User);
-
-            if (updateState == EnumUpdateResult.EntryNotFound)
-            {
-                return NotFound("Entry to update not found");
-            }
-
-            return Ok();
+            return crudService.Update(updateClass, User);
         }
 
 

@@ -21,13 +21,23 @@ namespace UniversityAPI.Services
             this.context = context;
         }
 
-        public void AddClass(Classes st, ClaimsPrincipal claims)
+        public void Add(Classes st, ClaimsPrincipal claims)
         {
             context.CreateModificationInformation(st, claims);
             context.Classes.Add(st);
         }
 
-        public PagedList<Classes> GetClasses(ClassQueryParameters clParam)
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Classes model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PagedList<Classes> Get(ClassQueryParameters clParam)
         {
             var collection = context.Classes.AsQueryable();
 
@@ -42,6 +52,11 @@ namespace UniversityAPI.Services
             return PagedList<Classes>.Create(collection, clParam.PageNumber, clParam.PageSize);
         }
 
+        public Classes Get(int id)
+        {
+            return context.Classes.Where(cl => cl.ClassId == id).FirstOrDefault();            
+        }
+
         public override bool Save()
         {
             try
@@ -54,7 +69,7 @@ namespace UniversityAPI.Services
             }
         }
 
-        public EnumUpdateResult UpdateClass(Classes cl, ClaimsPrincipal claims)
+        public EnumUpdateResult Update(Classes cl, ClaimsPrincipal claims)
         {
             if (!context.Classes.Contains(cl))
             {
